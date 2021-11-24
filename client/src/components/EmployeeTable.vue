@@ -32,7 +32,18 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
+  mounted() {
+    axios
+      .get('http://localhost:5000/api/employees/')
+      .then((response) => {
+        this.employees = response.data;
+        console.log(response.data);
+      })
+      .catch((error) => console.log(error));
+  },
   data() {
     return {
       search: '',
@@ -55,48 +66,8 @@ export default {
           value: 'actions',
         },
       ],
-      // Employees data dummies
-      employees: [
-        {
-          id: 1,
-          name: 'Kaminohara Shouko',
-          gender: 'Female',
-          departement: 'Data Analyst',
-          about:
-            'She is a perfect analyst in bussinest also she is a software engineer at Kovikov.jp',
-        },
-        {
-          id: 2,
-          name: 'Takuya Matsuyama',
-          gender: 'Male',
-          departement: 'Software Engineer',
-          about:
-            'Takuya is a freelance and a full-stack developer based in Osaka.',
-        },
-        {
-          id: 3,
-          name: 'Dan Abramov',
-          gender: 'Male',
-          departement: 'Software Engineer',
-          about:
-            'Dan is a software engineer at React.js and facebook he also work in Facebook Open Source',
-        },
-        {
-          id: 4,
-          name: 'Resi Respati',
-          gender: 'Male',
-          departement: 'Senior FrontEnd Developer',
-          about:
-            'Resir is a senior frontend devs and passionate with proficient with css and js framework he work in Kata.ai',
-        },
-        {
-          id: 5,
-          name: 'Ryan Dahl',
-          gender: 'Male',
-          departement: 'Software Engineer',
-          about: 'Ryan Dahl is a founder node.js he is a brilliant person',
-        },
-      ],
+      // Employees data  will be forced if we using axios to get the data in db
+      employees: [],
     };
   },
   methods: {
@@ -112,15 +83,19 @@ export default {
       }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
-          this.deleteItemConfirm();
+          const deleteEmployee = this.employees[this.selectedItemIndex];
+          axios
+            .delete(`http://localhost:5000/api/employees/${deleteEmployee.id}`)
+            .then((response) => {
+              this.employees.splice(this.selectedItemIndex, 1);
+              console.log(response.data);
+            })
+            .catch((error) => console.log(error));
           this.$swal('Succes, user was deleted!', '', 'success');
         } else if (result.isDenied) {
           this.$swal('Changes are not saved', '', 'info');
         }
       });
-    },
-    deleteItemConfirm() {
-      this.employees.splice(this.selectedItemIndex, 1);
     },
   },
 };
