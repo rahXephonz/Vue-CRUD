@@ -1,131 +1,85 @@
 <template>
-  <div class="relative min-h-screen md:flex">
-    <!-- mobile menu bar -->
-    <div class="bg-gray-800 text-gray-100 flex justify-between md:hidden">
-      <!-- mobile menu button -->
-      <button
-        class="mobile-menu-button p-4 focus:outline-none focus:bg-gray-700"
+  <div>
+    <v-app-bar app dark>
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <a href="/" style="color: #fff"
+        ><v-toolbar-title class="font-bold"
+          >Employee Management</v-toolbar-title
+        ></a
       >
-        <svg
-          class="h-5 w-5"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M4 6h16M4 12h16M4 18h16"
-          />
-        </svg>
-      </button>
-    </div>
+    </v-app-bar>
 
-    <!-- sidebar -->
-    <div
-      class="
-        sidebar
-        bg-blue-800
-        text-blue-100
-        w-64
-        space-y-6
-        py-7
-        px-2
-        absolute
-        inset-y-0
-        left-0
-        transform
-        -translate-x-full
-        md:relative md:translate-x-0
-        transition
-        duration-200
-        ease-in-out
-      "
-    >
-      <!-- logo -->
-      <a href="#" class="text-white flex items-center space-x-2 px-4">
-        <svg
-          class="w-8 h-8"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
-          />
-        </svg>
-        <span class="text-2xl font-extrabold">Tryin Depart</span>
-      </a>
+    <!-- Drawwer -->
+    <v-navigation-drawer v-model="drawer" absolute temporary dark>
+      <!-- Avatar Admin -->
+      <v-row justify="center" class="mt-5">
+        <v-col cols="7">
+          <v-avatar size="130">
+            <img
+              src="https://avatars.githubusercontent.com/u/77242429?v=4"
+              alt="admin"
+            />
+          </v-avatar>
+        </v-col>
+      </v-row>
 
-      <!-- nav -->
-      <nav>
-        <a
-          href="#"
-          class="
-            block
-            py-5
-            px-4
-            rounded
-            transition
-            duration-200
-            hover:bg-blue-700 hover:text-white
-          "
-        >
-          Home
-        </a>
-        <a
-          href=""
-          class="
-            block
-            py-5
-            px-4
-            rounded
-            transition
-            duration-200
-            hover:bg-blue-700 hover:text-white
-          "
-        >
-          About
-        </a>
-        <a
-          href=""
-          class="
-            block
-            py-5
-            px-4
-            rounded
-            transition
-            duration-200
-            hover:bg-blue-700 hover:text-white
-          "
-        >
-          Features
-        </a>
-        <a
-          href=""
-          class="
-            block
-            py-5
-            px-4
-            rounded
-            transition
-            duration-200
-            hover:bg-blue-700 hover:text-white
-          "
-        >
-          Pricing
-        </a>
-      </nav>
-    </div>
+      <!-- Nama Admin -->
+      <v-row justify="center" class="mt-n1">
+        <v-col cols="9">
+          <p class="text-white">Nikolai Konzvelyzakov</p>
+        </v-col>
+      </v-row>
+
+      <!-- Navigasi -->
+      <v-list nav dense>
+        <v-list-item-group v-model="group">
+          <v-list-item
+            v-for="(item, index) in items"
+            :key="index"
+            :to="item.route"
+            style="margin: 10px 0px"
+          >
+            <v-list-item-icon>
+              <v-icon v-text="item.icon"></v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title
+                v-text="item.title"
+                style="font-size: 15px"
+              ></v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
+    </v-navigation-drawer>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  name: 'sideBar',
+  data() {
+    return {
+      drawer: false,
+      group: null,
+      items: [
+        {
+          icon: 'mdi-book-open',
+          title: 'List Employee',
+          route: '/employee-table',
+        },
+        {
+          icon: 'mdi-account',
+          title: 'Employee Registration',
+          route: '/register-new-employee',
+        },
+      ],
+    };
+  },
+  watch: {
+    group() {
+      this.drawer = false;
+    },
+  },
+};
 </script>
